@@ -29,6 +29,9 @@ export interface Inputs {
   teamReviewers: string[]
   milestone: number
   draft: boolean
+  disableThrottling: boolean
+  retryAttempts: number
+  minimumRetryAfter: number
 }
 
 export async function createPullRequest(inputs: Inputs): Promise<void> {
@@ -46,7 +49,7 @@ export async function createPullRequest(inputs: Inputs): Promise<void> {
     core.endGroup()
 
     // Init the GitHub client
-    const githubHelper = new GitHubHelper(inputs.token)
+    const githubHelper = new GitHubHelper(inputs)
 
     core.startGroup('Determining the base and head repositories')
     // Determine the base repository from git config
