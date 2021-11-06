@@ -24,7 +24,10 @@ async function run(): Promise<void> {
       reviewers: utils.getInputAsArray('reviewers'),
       teamReviewers: utils.getInputAsArray('team-reviewers'),
       milestone: Number(core.getInput('milestone')),
-      draft: core.getInput('draft') === 'true'
+      draft: core.getInput('draft') === 'true',
+      disableThrottling: core.getInput('disable-throttling') === 'true',
+      retryAttempts: Number(core.getInput('retry-attempts')),
+      minimumRetryAfter: Number(core.getInput('minimum-retry-after'))
     }
     core.debug(`Inputs: ${inspect(inputs)}`)
 

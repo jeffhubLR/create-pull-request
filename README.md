@@ -63,6 +63,9 @@ All inputs are **optional**. If not set, sensible defaults will be used.
 | `team-reviewers` | A comma or newline-separated list of GitHub teams to request a review from. Note that a `repo` scoped [PAT](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) may be required. See [this issue](https://github.com/peter-evans/create-pull-request/issues/155). | |
 | `milestone` | The number of the milestone to associate this pull request with. | |
 | `draft` | Create a [draft pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests#draft-pull-requests). | `false` |
+| `disable-throttling` | Disable Github-recommended throttle handling which utilizes [octokit/plugin-throttling.js](https://github.com/octokit/plugin-throttling.js). | `false` |
+| `retry-attempts` | Number of times throttled attempts should be retried before failing. | 5 |
+| `minimum-retry-after` | Minimum time in seconds to wait before retry. | 5 | 
 
 For self-hosted runners behind a corporate proxy set the `https_proxy` environment variable.
 ```yml

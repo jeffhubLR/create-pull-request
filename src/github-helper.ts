@@ -19,10 +19,40 @@ interface Pull {
 export class GitHubHelper {
   private octokit: InstanceType<typeof Octokit>
 
-  constructor(token: string) {
-    const options: OctokitOptions = {}
-    if (token) {
-      options.auth = `${token}`
+  constructor(inputs: Inputs) {
+    const options: OctokitOptions = {
+      throttle: {
+        enabled: !inputs.disableThrottling,
+        minimumAbuseRetryAfter: inputs.minimumRetryAfter,
+        onRateLimit: (retryAfter, options, octokit) => {
+          octokit.log.warn(
+            `Request quota exhausted for request ${options.method} ${options.url}`
+          )
+
+          if (options.request.retryCount < inputs.retryAttempts) {
+            octokit.log.warn(
+              `Retrying after ${retryAfter} seconds! Attempt #${options.request.retryCount}`
+            )
+            return true
+          }
+        },
+        onAbuseLimit: (retryAfter, options, octokit) => {
+          // does not retry, only logs a warning
+          octokit.log.warn(
+            `Abuse detected for request ${options.method} ${options.url}`
+          )
+
+          if (options.request.retryCount < inputs.retryAttempts) {
+            octokit.log.warn(
+              `Retrying after ${retryAfter} seconds! Attempt #${options.request.retryCount}`
+            )
+            return true
+          }
+        }
+      }
+    }
+    if (inputs.token) {
+      options.auth = `${inputs.token}`
     }
     options.baseUrl = process.env['GITHUB_API_URL'] || 'https://api.github.com'
     this.octokit = new Octokit(options)

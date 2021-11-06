@@ -64,6 +64,15 @@ inputs:
   draft:
     description: 'Create a draft pull request'
     default: false
+  disable-throttling:
+    description: 'Disable Github-recommended throttle handling'
+    default: false
+  retry-attempts:
+    description: 'Number of times throttled attempts should be retried before failing'
+    default: 10
+  minimum-retry-after:
+    description: 'Minimum time in seconds to wait before retry'
+    default: 10
 outputs:
   pull-request-number:
     description: 'The pull request number'
